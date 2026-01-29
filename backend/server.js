@@ -7,7 +7,7 @@ require("dotenv").config();
 const app = express();
 app.use(express.json());
 
-// Routes
+// Rgoutes
 app.use("/api/admin", require("./routes/adminRoutes"));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api/gallery", require("./routes/galleryRoutes"));
