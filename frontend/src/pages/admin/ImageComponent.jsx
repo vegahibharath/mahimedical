@@ -188,12 +188,10 @@ const ImageComponent = (props) => {
                 {/* Context Menu */}
                 {menuOpen && isEditable && (
                     <div className="image-menu">
-                        <button onClick={() => setLayout('inline')}>Inline</button>
+                    
                         <button onClick={() => setLayout('wrap-left')}>Wrap Left</button>
                         <button onClick={() => setLayout('wrap-right')}>Wrap Right</button>
-                        <button onClick={() => setLayout('center')}>Center</button>
-                        <button onClick={() => setPosition('absolute', -1)}>Behind Text</button>
-                        <button onClick={() => setPosition('absolute', 1)}>In Front</button>
+                   
                     </div>
                 )}
             </div>

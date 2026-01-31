@@ -1,15 +1,16 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Home from "../pages/user/Home";
-import AdminLogin from "../pages/admin/AdminLogin";
-import AdminDashboard from "../pages/admin/AdminDashboard";
-import AddTherapist from "../pages/admin/AddTherapist";
+import Home from "./pages/user/Home";
+import AdminLogin from "./pages/admin/AdminLogin";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AddTherapist from "./pages/admin/AddTherapist";
 
-import ProtectedRoute from "../components/ProtectedRoute";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 import "bootstrap/dist/css/bootstrap.min.css";
-import Therapists from "../pages/admin/Therapists";
-import BlogManager from "../pages/admin/BlogManager";
+import Therapists from "./pages/admin/Therapists";
+import BlogManager from "./pages/admin/BlogManager";
+import ImageBlogs from "./pages/user/ImageBlogs";
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
 
         {/* User Route */}
         <Route path="/" element={<Home />} />
-
+<Route path="/blogs/images" element={<ImageBlogs/>} />
         {/* Admin Login */}
         <Route path="/admin/login" element={<AdminLogin />} />
 

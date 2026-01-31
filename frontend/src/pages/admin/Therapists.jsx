@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import api,{IMAGE_BASE_URL} from "../../src/api/api";
+import api,{IMAGE_BASE_URL} from "../../api/api";
 
 const Therapists = () => {
  const [therapists, setTherapists] = useState([]);

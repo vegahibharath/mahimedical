@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import api from "../../src/api/api";
+import api,{IMAGE_BASE_URL} from "../../api/api";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [lightbox, setLightbox] = useState(null);
   const [therapists, setTherapists] = useState([]);
   const [loading, setLoading] = useState(true);
+const navigate = useNavigate();
 
   const images = [
     "https://via.placeholder.com/400",
@@ -28,7 +30,37 @@ const Home = () => {
 
     fetchTherapists();
   }, []);
+ const hasLiked = (id) => {
+  const likedBlogs = JSON.parse(localStorage.getItem("likedBlogs")) || [];
+  return likedBlogs.includes(id);
+};
 
+const markLiked = (id) => {
+  const likedBlogs = JSON.parse(localStorage.getItem("likedBlogs")) || [];
+  localStorage.setItem("likedBlogs", JSON.stringify([...likedBlogs, id]));
+};
+const likeBlog = async (id) => {
+  if (hasLiked(id)) {
+    alert("You already liked this blog ❤️");
+    return;
+  }
+
+  try {
+    const res = await api.post(`/blogs/${id}/like`);
+
+    setBlogs((prevBlogs) =>
+      prevBlogs.map((blog) =>
+        blog._id === id
+          ? { ...blog, likes: res.data.likes }
+          : blog
+      )
+    );
+
+    markLiked(id); // 👈 save locally
+  } catch (err) {
+    console.error("❌ Like failed:", err);
+  }
+};
   // 🔹 Scroll to therapists section
   const scrollToTherapists = () => {
     document
@@ -55,7 +87,14 @@ const Home = () => {
           >
             Therapists
           </span>
-          <span className="text-white mx-2">Blogs</span>
+<span
+  className="text-white mx-2"
+  style={{ cursor: "pointer" }}
+  onClick={() => navigate("/blogs/images")}
+>
+  Blogs
+</span>
+
           <span className="text-white mx-2">Contact</span>
         </div>
       </nav>
@@ -85,7 +124,7 @@ const Home = () => {
                 <div className="card shadow h-100">
 
                   <img
-                    src={`http://localhost:5000/${t.image}`}
+                    src={`${IMAGE_BASE_URL}/${t.image}`}
                     className="card-img-top"
                     alt={t.name}
                     style={{ height: "220px", objectFit: "cover" }}

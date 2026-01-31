@@ -1,5 +1,5 @@
 import { useState } from "react";
-import api from "../../src/api/api";
+import api from "../../api/api";
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");

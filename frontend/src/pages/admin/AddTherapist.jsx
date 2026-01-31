@@ -1,5 +1,5 @@
 import { useState } from "react";
-import api,{IMAGE_BASE_URL} from "../../src/api/api";
+import api from "../../api/api";
 
 const AddTherapist = () => {
   const [form, setForm] = useState({});
