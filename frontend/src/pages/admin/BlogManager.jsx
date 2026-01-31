@@ -83,7 +83,13 @@ import api,{IMAGE_BASE_URL} from "../../api/api";
       formData.append("file", file);
 
       const res = await api.post("/blogs/upload-image", formData);
-      const imageUrl = `${IMAGE_BASE_URL}/${res.data.url}`;
+     const imageUrl =
+  IMAGE_BASE_URL === "/"
+    ? res.data.url.startsWith("http")
+      ? res.data.url
+      : `/${res.data.url.replace(/^\/+/, "")}`
+    : `${IMAGE_BASE_URL.replace(/\/$/, "")}/${res.data.url.replace(/^\/+/, "")}`;
+
       console.log("✅ Upload API response:", res.data);
 
       editorInstance
