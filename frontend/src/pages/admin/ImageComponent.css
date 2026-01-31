@@ -1,0 +1,84 @@
+.image-component-wrapper {
+    /* Ensure wrapper doesn't collapse */
+    min-height: 1rem;
+}
+
+.image-container img {
+    max-width: 100%;
+    border-radius: 4px;
+}
+
+.image-container {
+    cursor: pointer;
+}
+
+.ProseMirror-selectednode img {
+    outline: 3px solid #61dafb;
+}
+
+.image-menu {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    z-index: 50;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.image-menu button {
+    background: none;
+    border: none;
+    text-align: left;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.image-menu button:hover {
+    background: #f0f0f0;
+}
+
+/* Resize Handles */
+.resize-handle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #61dafb;
+    border: 1px solid #fff;
+    z-index: 20;
+}
+
+.resize-handle.ne {
+    top: -5px;
+    right: -5px;
+    cursor: ne-resize;
+}
+
+.resize-handle.nw {
+    top: -5px;
+    left: -5px;
+    cursor: nw-resize;
+}
+
+.resize-handle.se {
+    bottom: -5px;
+    right: -5px;
+    cursor: se-resize;
+}
+
+.resize-handle.sw {
+    bottom: -5px;
+    left: -5px;
+    cursor: sw-resize;
+}
+
+/* Dragging state */
+.image-component-wrapper[data-drag-handle="true"] {
+    cursor: move;
+}
