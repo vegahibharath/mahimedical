@@ -8,4 +8,8 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
+<<<<<<< HEAD
 export default ProtectedRoute;
+=======
+export default ProtectedRoute;
+>>>>>>> origin/sruthi

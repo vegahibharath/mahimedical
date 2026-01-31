@@ -53,4 +53,8 @@ const AdminLogin = () => {
   );
 };
 
+<<<<<<< HEAD
 export default AdminLogin;
+=======
+export default AdminLogin;
+>>>>>>> origin/sruthi

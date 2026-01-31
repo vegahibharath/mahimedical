@@ -9,4 +9,8 @@ export const isAuthenticated = () => {
 export const logout = () => {
   localStorage.removeItem("adminToken");
   window.location.href = "/admin/login";
+<<<<<<< HEAD
 };
+=======
+};
+>>>>>>> origin/sruthi
