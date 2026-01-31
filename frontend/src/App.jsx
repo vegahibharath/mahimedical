@@ -5,6 +5,8 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import BlogManager from "./pages/admin/BlogManager";
 import GalleryManager from "./pages/admin/GalleryManager";
 import NewsManager from "./pages/admin/NewsManager";
+import AdminLayout from "./pages/admin/AdminLayout";
+
 import UserLayout from "./layouts/UserLayout";
 
 import Home from "./pages/user/Home";
@@ -22,48 +24,43 @@ function App() {
 
       <Routes>
 
-        <Route path="/" element={<Home />} />
-
+        {/* ADMIN LOGIN */}
         <Route path="/admin/login" element={<AdminLogin />} />
 
+        {/* ADMIN PANEL WITH SIDEBAR */}
         <Route
-          path="/admin/dashboard"
+          path="/admin"
           element={
             <ProtectedRoute>
-              <AdminDashboard />
+              <AdminLayout />
             </ProtectedRoute>
           }
-        />
+        >
 
-        <Route
-          path="/admin/blogs"
-          element={<ProtectedRoute><BlogManager /></ProtectedRoute>}
-        />
+          <Route path="dashboard" element={<AdminDashboard />} />
 
-        <Route
-          path="/admin/gallery"
-          element={<ProtectedRoute><GalleryManager /></ProtectedRoute>}
-        />
+          <Route path="blogs" element={<BlogManager />} />
 
-        <Route
-          path="/admin/news"
-          element={<ProtectedRoute><NewsManager /></ProtectedRoute>}
-        />
-{/* USER WEBSITE */}
+          <Route path="gallery" element={<GalleryManager />} />
 
-<Route path="/" element={<UserLayout />}>
+          <Route path="news" element={<NewsManager />} />
 
-  <Route index element={<Home />} />
+        </Route>
 
-  <Route path="blogs" element={<BlogPage />} />
+        {/* USER WEBSITE */}
+        <Route path="/" element={<UserLayout />}>
 
-  <Route path="news" element={<NewsPage />} />
+          <Route index element={<Home />} />
 
-  <Route path="gallery" element={<GalleryPage />} />
+          <Route path="blogs" element={<BlogPage />} />
 
-  <Route path="contact" element={<ContactPage />} />
+          <Route path="news" element={<NewsPage />} />
 
-</Route>
+          <Route path="gallery" element={<GalleryPage />} />
+
+          <Route path="contact" element={<ContactPage />} />
+
+        </Route>
 
       </Routes>
 

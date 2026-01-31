@@ -4,6 +4,7 @@ import api, { IMAGE_BASE_URL } from "../../api/api";
 const BlogPage = () => {
 
   const [blogs, setBlogs] = useState([]);
+  const [activeBlog, setActiveBlog] = useState(null);
 
   useEffect(() => {
     fetchBlogs();
@@ -15,29 +16,34 @@ const BlogPage = () => {
     setBlogs(res.data);
   };
 
-  // ================= VIEW BLOG =================
-  const viewBlog = async (id) => {
+  // ================= OPEN BLOG =================
+  const openBlog = async (blog) => {
 
     const viewedBlogs =
       JSON.parse(localStorage.getItem("viewedBlogs")) || [];
 
-    // prevent multiple view count
-    if (viewedBlogs.includes(id)) {
-      return;
+    // Increase view only once
+    if (!viewedBlogs.includes(blog._id)) {
+
+      try {
+
+        await api.get(`/blogs/${blog._id}`);
+
+        viewedBlogs.push(blog._id);
+        localStorage.setItem("viewedBlogs", JSON.stringify(viewedBlogs));
+
+        fetchBlogs();
+
+      } catch (error) {
+        console.log(error);
+      }
     }
 
-    try {
+    // Lock background scroll
+    document.body.style.overflow = "hidden";
 
-      await api.get(`/blogs/${id}`); // increments views
-
-      viewedBlogs.push(id);
-      localStorage.setItem("viewedBlogs", JSON.stringify(viewedBlogs));
-
-      fetchBlogs();
-
-    } catch (error) {
-      console.log(error);
-    }
+    // Show focus card
+    setActiveBlog(blog);
   };
 
   // ================= LIKE BLOG =================
@@ -46,7 +52,6 @@ const BlogPage = () => {
     const likedBlogs =
       JSON.parse(localStorage.getItem("likedBlogs")) || [];
 
-    // prevent multiple likes
     if (likedBlogs.includes(id)) {
       alert("You already liked this blog");
       return;
@@ -66,21 +71,28 @@ const BlogPage = () => {
     }
   };
 
+  // ================= CLOSE BLOG =================
+  const closeBlog = () => {
+    document.body.style.overflow = "auto";
+    setActiveBlog(null);
+  };
+
   return (
     <div className="container py-4">
 
       <h4 className="mb-4">Blogs</h4>
 
+      {/* BLOG GRID */}
       <div className="row">
 
         {blogs.map(blog => (
 
-          <div key={blog._id} className="col-md-4 mb-3">
+          <div key={blog._id} className="col-md-4 mb-4">
 
             <div
               className="card shadow h-100"
-              style={{ cursor: "pointer" }}
-              onClick={() => viewBlog(blog._id)}
+              role="button"
+              onClick={() => openBlog(blog)}
             >
 
               <img
@@ -95,23 +107,15 @@ const BlogPage = () => {
 
                 <h6>{blog.title}</h6>
 
-                <p className="small">
+                <p className="small text-muted">
                   {blog.content.substring(0, 100)}...
                 </p>
 
-                <div className="d-flex justify-content-between align-items-center">
+                <div className="d-flex justify-content-between">
 
                   <span>👁 {blog.views}</span>
 
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation(); // prevent triggering view click
-                      likeBlog(blog._id);
-                    }}
-                    className="btn btn-outline-danger btn-sm"
-                  >
-                    ❤️ {blog.likes}
-                  </button>
+                  <span>❤️ {blog.likes}</span>
 
                 </div>
 
@@ -124,6 +128,74 @@ const BlogPage = () => {
         ))}
 
       </div>
+
+      {/* FOCUS BLOG VIEW */}
+      {activeBlog && (
+
+        <div
+          className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-75 d-flex justify-content-center align-items-center"
+          style={{ zIndex: 1050 }}
+        >
+
+          <div className="col-lg-6 col-md-8 col-11">
+
+            <div className="card shadow-lg">
+
+              {/* IMAGE */}
+              <img
+                src={`${IMAGE_BASE_URL}/${activeBlog.image}`}
+                className="card-img-top"
+                style={{ height: "280px", objectFit: "cover" }}
+                alt="blog"
+              />
+
+              {/* SCROLLABLE CONTENT */}
+              <div
+                className="card-body overflow-auto"
+                style={{ maxHeight: "60vh" }}
+              >
+
+                <h5 className="fw-bold">
+                  {activeBlog.title}
+                </h5>
+
+                <p className="text-muted">
+                  {activeBlog.content}
+                </p>
+
+                <div className="d-flex justify-content-between align-items-center">
+
+                  <span>👁 {activeBlog.views}</span>
+
+                  <button
+                    onClick={() => likeBlog(activeBlog._id)}
+                    className="btn btn-outline-danger btn-sm"
+                  >
+                    ❤️ {activeBlog.likes}
+                  </button>
+
+                </div>
+
+                <div className="text-end mt-3">
+
+                  <button
+                    className="btn btn-secondary btn-sm"
+                    onClick={closeBlog}
+                  >
+                    Close
+                  </button>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      )}
 
     </div>
   );

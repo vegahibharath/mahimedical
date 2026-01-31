@@ -4,6 +4,7 @@ import api from "../../api/api";
 const NewsPage = () => {
 
   const [news, setNews] = useState([]);
+  const [activeNews, setActiveNews] = useState(null);
 
   useEffect(() => {
     fetchNews();
@@ -14,68 +15,95 @@ const NewsPage = () => {
 
     const res = await api.get("/news");
 
-    // show only LIVE news (optional but recommended)
     const liveNews = res.data.filter(n => n.isLive === true);
 
     setNews(liveNews);
   };
 
-  // ================= INCREASE VIEW ON CLICK =================
-  const openNews = async (id) => {
+  // ================= OPEN NEWS =================
+  const openNews = async (item) => {
 
-  // get stored viewed news
-  const viewedNews = JSON.parse(localStorage.getItem("viewedNews")) || [];
+    const viewedNews =
+      JSON.parse(localStorage.getItem("viewedNews")) || [];
 
-  // if already viewed → don't count again
-  if (viewedNews.includes(id)) {
-    console.log("Already viewed");
-    return;
-  }
+    if (!viewedNews.includes(item._id)) {
 
-  try {
+      try {
 
-    // call API to increment view
-    await api.get(`/news/${id}`);
+        await api.get(`/news/${item._id}`);
 
-    // store this id in localStorage
-    viewedNews.push(id);
-    localStorage.setItem("viewedNews", JSON.stringify(viewedNews));
+        viewedNews.push(item._id);
+        localStorage.setItem("viewedNews", JSON.stringify(viewedNews));
 
-    // reload updated counts
-    fetchNews();
+        fetchNews();
 
-  } catch (error) {
-    console.log(error);
-  }
-};
+      } catch (error) {
+        console.log(error);
+      }
+    }
 
+    document.body.style.overflow = "hidden";
+    setActiveNews(item);
+  };
+
+  // ================= CLOSE NEWS =================
+  const closeNews = () => {
+    document.body.style.overflow = "auto";
+    setActiveNews(null);
+  };
 
   return (
     <div className="container py-4">
 
-      <h4 className="mb-4">Latest News</h4>
+      {/* HEADER */}
+      <div className="d-flex justify-content-between align-items-center mb-4">
 
-      <div className="row">
+      
+
+        <span className="badge bg-danger rounded-pill px-3 py-2">
+          LIVE
+        </span>
+
+      </div>
+
+      {/* NEWS GRID */}
+      <div className="row g-4">
 
         {news.map(n => (
 
-          <div key={n._id} className="col-md-4 mb-3">
+          <div key={n._id} className="col-lg-4 col-md-6">
 
             <div
-              className="card shadow"
-              style={{ cursor: "pointer" }}
-              onClick={() => openNews(n._id)}
+              className="card border-0 shadow-sm h-100"
+              role="button"
+              onClick={() => openNews(n)}
             >
 
-              <div className="card-body">
+              <div className="card-body d-flex flex-column">
 
-                <h6>{n.title}</h6>
+                <h6 className="fw-bold mb-2">
+                  {n.title}
+                </h6>
 
-                <p>{n.snippet}</p>
+                {/* PREVIEW */}
+                <p
+                  className="text-muted small mb-3 overflow-hidden"
+                  style={{ height: "60px" }}
+                >
+                  {n.snippet}
+                </p>
 
-                <span className="badge bg-primary">
-                  👁 {n.views}
-                </span>
+                <div className="mt-auto d-flex justify-content-between align-items-center">
+
+                  {/* <span className="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill">
+                    👁 {n.views}
+                  </span> */}
+
+                  <span className="small text-muted">
+                    Read More →
+                  </span>
+
+                </div>
 
               </div>
 
@@ -86,6 +114,54 @@ const NewsPage = () => {
         ))}
 
       </div>
+
+      {/* FULL NEWS VIEW */}
+      {activeNews && (
+
+        <div
+          className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-75 d-flex justify-content-center align-items-center"
+          style={{ zIndex: 1050 }}
+        >
+
+          <div className="col-lg-7 col-md-9 col-11">
+
+            <div className="card shadow-lg">
+
+              <div className="card-body">
+
+                <h4 className="fw-bold mb-3">
+                  {activeNews.title}
+                </h4>
+
+                <div
+                  className="text-muted overflow-auto mb-3"
+                  style={{ maxHeight: "60vh" }}
+                >
+                  {activeNews.snippet}
+                </div>
+
+                <div className="d-flex justify-content-between align-items-center">
+
+                  <span>👁 {activeNews.views}</span>
+
+                  <button
+                    className="btn btn-secondary btn-sm"
+                    onClick={closeNews}
+                  >
+                    Close
+                  </button>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      )}
 
     </div>
   );

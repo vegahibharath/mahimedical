@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import api,{IMAGE_BASE_URL} from "../../api/api";
+import api, { IMAGE_BASE_URL } from "../../api/api";
 
 const GalleryPage = () => {
 
@@ -13,24 +13,47 @@ const GalleryPage = () => {
   return (
     <div className="container py-4">
 
-      <h4 className="mb-4">Gallery</h4>
+      {/* Title */}
+      <div className="text-center mb-4">
+        <h3 className="fw-bold">Gallery</h3>
+        <p className="text-muted">Our latest moments</p>
+      </div>
 
-      <div className="row">
+      {/* Gallery Grid */}
+      <div className="row g-4">
 
         {gallery.map(img => (
 
-          <div key={img._id} className="col-md-3 col-6 mb-3">
+          <div key={img._id} className="col-lg-3 col-md-4 col-sm-6">
 
-            <img
-              src={`${IMAGE_BASE_URL}/${img.image}`}
-              className="img-fluid shadow"
-              style={{ height: "150px", objectFit: "cover", cursor: "pointer" }}
-              alt=""
+            <div
+              className="card h-100 shadow-sm border-0"
+              role="button"
               onClick={() => setLightbox(`${IMAGE_BASE_URL}/${img.image}`)}
-            />
-            <p>{img.title}</p>
-              <p>{img.description}</p>
+            >
 
+              {/* Image */}
+              <img
+                src={`${IMAGE_BASE_URL}/${img.image}`}
+                className="card-img-top img-fluid"
+                alt=""
+                style={{ height: "180px", objectFit: "cover" }}
+              />
+
+              {/* Content */}
+              <div className="card-body text-center">
+
+                <h6 className="card-title mb-1 text-truncate">
+                  {img.title}
+                </h6>
+
+                <small className="text-muted text-truncate d-block">
+                  {img.description}
+                </small>
+
+              </div>
+
+            </div>
 
           </div>
 
@@ -38,15 +61,25 @@ const GalleryPage = () => {
 
       </div>
 
+      {/* Bootstrap Lightbox Style */}
       {lightbox && (
 
         <div
-          className="position-fixed w-100 h-100 d-flex justify-content-center align-items-center"
-          style={{ top: 0, left: 0, background: "rgba(0,0,0,0.7)" }}
+          className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-75 d-flex align-items-center justify-content-center"
+          style={{ zIndex: 1050 }}
           onClick={() => setLightbox(null)}
         >
 
-          <img src={lightbox} className="img-fluid" alt="" />
+          <div className="bg-white p-3 rounded shadow">
+
+            <img
+              src={lightbox}
+              className="img-fluid rounded"
+              style={{ maxHeight: "80vh" }}
+              alt=""
+            />
+
+          </div>
 
         </div>
 

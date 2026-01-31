@@ -7,6 +7,7 @@ const NewsManager = () => {
   const [title, setTitle] = useState("");
   const [snippet, setSnippet] = useState("");
   const [news, setNews] = useState([]);
+const [viewNews, setViewNews] = useState(null);
 
   // Edit modal states
   const [editId, setEditId] = useState(null);
@@ -124,12 +125,26 @@ const NewsManager = () => {
 
                 <h5>{n.title}</h5>
 
-                <p>{n.snippet}</p>
+                <div
+  className="text-muted small overflow-hidden mb-2"
+  style={{ height: "60px" }}
+>
+  {n.snippet}
+</div>
+
 
                 <div className="d-flex justify-content-between mb-2">
                   <span>👁 {n.views}</span>
                   <span>{n.isLive ? "🟢 Live" : "🔴 Hidden"}</span>
                 </div>
+<button
+  className="btn btn-info btn-sm w-100 mb-2"
+  data-bs-toggle="modal"
+  data-bs-target="#viewNewsModal"
+  onClick={() => setViewNews(n)}
+>
+  View
+</button>
 
                 <button
                   className="btn btn-warning btn-sm w-100 mb-2"
@@ -172,7 +187,12 @@ const NewsManager = () => {
               <button className="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
-            <div className="modal-body">
+          <div
+ className="modal-body overflow-auto text-break"
+
+  style={{ maxHeight: "60vh" }}
+>
+
 
               {/* TITLE */}
               <input
@@ -223,6 +243,61 @@ const NewsManager = () => {
           </div>
         </div>
       </div>
+<div
+  className="modal fade"
+  id="viewNewsModal"
+  tabIndex="-1"
+>
+  <div className="modal-dialog modal-lg modal-dialog-centered">
+    <div className="modal-content">
+
+      <div className="modal-header">
+        <h5 className="modal-title">
+          {viewNews?.title}
+        </h5>
+
+        <button
+          className="btn-close"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+
+      <div
+        className="modal-body overflow-auto"
+        style={{ maxHeight: "60vh" }}
+      >
+
+       <p className="text-muted text-break">
+
+          {viewNews?.snippet}
+        </p>
+
+        <div className="d-flex justify-content-between mt-3">
+
+          {/* <span>👁 {viewNews?.views}</span> */}
+
+          <span>
+            {viewNews?.isLive ? "🟢 Live" : "🔴 Hidden"}
+          </span>
+
+        </div>
+
+      </div>
+
+      <div className="modal-footer">
+
+        <button
+          className="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >
+          Close
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+</div>
 
     </div>
   );
