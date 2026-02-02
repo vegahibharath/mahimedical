@@ -6,7 +6,6 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AddTherapist from "./pages/admin/AddTherapist";
 
 import ProtectedRoute from "./components/ProtectedRoute";
-
 import "bootstrap/dist/css/bootstrap.min.css";
 import Therapists from "./pages/admin/Therapists";
 import BlogManager from "./pages/admin/BlogManager";
