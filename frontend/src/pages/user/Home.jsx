@@ -30,37 +30,7 @@ const navigate = useNavigate();
 
     fetchTherapists();
   }, []);
- const hasLiked = (id) => {
-  const likedBlogs = JSON.parse(localStorage.getItem("likedBlogs")) || [];
-  return likedBlogs.includes(id);
-};
 
-const markLiked = (id) => {
-  const likedBlogs = JSON.parse(localStorage.getItem("likedBlogs")) || [];
-  localStorage.setItem("likedBlogs", JSON.stringify([...likedBlogs, id]));
-};
-const likeBlog = async (id) => {
-  if (hasLiked(id)) {
-    alert("You already liked this blog ❤️");
-    return;
-  }
-
-  try {
-    const res = await api.post(`/blogs/${id}/like`);
-
-    setBlogs((prevBlogs) =>
-      prevBlogs.map((blog) =>
-        blog._id === id
-          ? { ...blog, likes: res.data.likes }
-          : blog
-      )
-    );
-
-    markLiked(id); // 👈 save locally
-  } catch (err) {
-    console.error("❌ Like failed:", err);
-  }
-};
   // 🔹 Scroll to therapists section
   const scrollToTherapists = () => {
     document
