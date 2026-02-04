@@ -1,19 +1,15 @@
 const mongoose = require("mongoose");
-
-const blogSchema = new mongoose.Schema(
+ 
+ const blogSchema = new mongoose.Schema(
   {
     title: {
       type: String,
       required: true,
       trim: true,
     },
-    content: {
+    textContent: {
       type: String,
-      required: true,
-    },
-    image: {
-      type: String,
-      required: true,
+      required: true, // TipTap JSON
     },
     likes: {
       type: Number,
@@ -26,5 +22,6 @@ const blogSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
+ 
+ 
 module.exports = mongoose.model("Blog", blogSchema);

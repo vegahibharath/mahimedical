@@ -1,0 +1,127 @@
+.menu-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    background-color: #f3f3f3;
+    padding: 8px 12px;
+    border-bottom: 1px solid #e0e0e0;
+    gap: 5px;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.menu-group {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.divider {
+    width: 1px;
+    height: 24px;
+    background-color: #ccc;
+    margin: 0 6px;
+}
+
+.menu-bar button {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 6px 8px;
+    /* Slightly tighter padding */
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    min-width: 30px;
+}
+
+.menu-bar button:hover {
+    background-color: #e6e6e6;
+    border-color: #d0d0d0;
+}
+
+.menu-bar button.is-active {
+    background-color: #d1e2f3;
+    color: #000;
+    font-weight: 500;
+    border-color: #a0c2e6;
+}
+
+.menu-bar button:disabled {
+    color: #aaa;
+    cursor: not-allowed;
+}
+
+/* Dropdowns */
+.dropdown-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-trigger {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+    min-width: unset !important;
+    padding: 6px 10px !important;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 100;
+    margin-top: 4px;
+}
+
+.dropdown-content {
+    background: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 4px 0;
+    min-width: 150px;
+    display: flex;
+    flex-direction: column;
+}
+
+.dropdown-content button {
+    width: 100%;
+    text-align: left;
+    justify-content: flex-start;
+    border-radius: 0;
+    padding: 8px 12px;
+}
+
+.dropdown-content button:hover {
+    background-color: #f0f0f0;
+}
+
+
+/* Color Picker */
+.color-picker-wrapper {
+    position: relative;
+}
+
+.color-picker-popover {
+    position: absolute;
+    z-index: 100;
+    top: 100%;
+    left: 0;
+    margin-top: 5px;
+}
+
+.cover {
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+}

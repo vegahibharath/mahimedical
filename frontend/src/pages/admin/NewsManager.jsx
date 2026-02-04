@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../../api/api";
-
+import { TbEye } from "react-icons/tb";
 const NewsManager = () => {
 
   // Create states
@@ -134,7 +134,10 @@ const [viewNews, setViewNews] = useState(null);
 
 
                 <div className="d-flex justify-content-between mb-2">
-                  <span>👁 {n.views}</span>
+                <span>
+  <TbEye  size={14} /> {n.views}
+</span>
+
                   <span>{n.isLive ? "🟢 Live" : "🔴 Hidden"}</span>
                 </div>
 <button

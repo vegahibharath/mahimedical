@@ -1,0 +1,113 @@
+.editor-container {
+    background: #fff;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    height: 90vh;
+    /* Taller editor */
+    max-width: 1200px;
+    /* Wider editor */
+    margin: 20px auto;
+}
+
+.editor-content-wrapper {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 40px;
+    /* More padding like a page */
+    background-color: #f8f9fa;
+    /* Outer background */
+    display: flex;
+    justify-content: center;
+}
+
+/* TipTap Specific Styles */
+.ProseMirror {
+    outline: none;
+    min-height: 100%;
+    background: white;
+    width: 100%;
+    max-width: 816px;
+    /* A4 width approx */
+    min-height: 1056px;
+    /* A4 height approx */
+    padding: 40px;
+    /* Page margins */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+.ProseMirror p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+/* Image Styles */
+.ProseMirror img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Table Styles - Critical for visual feedback */
+.ProseMirror table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+.ProseMirror td,
+.ProseMirror th {
+    min-width: 1em;
+    border: 2px solid #ced4da;
+    padding: 3px 5px;
+    vertical-align: top;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.ProseMirror th {
+    font-weight: bold;
+    text-align: left;
+    background-color: #f1f3f5;
+}
+
+.ProseMirror .selectedCell:after {
+    z-index: 2;
+    position: absolute;
+    content: "";
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: rgba(200, 200, 255, 0.4);
+    pointer-events: none;
+}
+
+.ProseMirror .column-resize-handle {
+    position: absolute;
+    right: -2px;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: #adf;
+    pointer-events: none;
+}
+
+/* Placeholder */
+.ProseMirror p.is-editor-empty:first-child::before {
+    color: #adb5bd;
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+}
+
+/* Hanging Indent for "Name - Content" layout */
+.hanging-indent {
+    margin-left: 120px;
+    text-indent: -120px;
+}

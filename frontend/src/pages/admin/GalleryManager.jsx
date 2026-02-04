@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
-import api,{IMAGE_BASE_URL} from "../../api/api";
+import api, { IMAGE_BASE_URL } from "../../api/api";
 
 const GalleryManager = () => {
 
-  // Create states
+  // CREATE STATES
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
   const [gallery, setGallery] = useState([]);
 
-  // Edit modal states
+  // VIEW STATE
+  const [viewItem, setViewItem] = useState(null);
+
+  // EDIT STATES
   const [editId, setEditId] = useState(null);
   const [editTitle, setEditTitle] = useState("");
   const [editDescription, setEditDescription] = useState("");
@@ -53,7 +56,7 @@ const GalleryManager = () => {
     fetchGallery();
   };
 
-  // ================= OPEN EDIT MODAL =================
+  // ================= OPEN EDIT =================
   const openEditModal = (item) => {
 
     setEditId(item._id);
@@ -70,7 +73,6 @@ const GalleryManager = () => {
     formData.append("title", editTitle);
     formData.append("description", editDescription);
 
-    // Only update image if new selected
     if (editImage) {
       formData.append("image", editImage);
     }
@@ -150,12 +152,34 @@ const GalleryManager = () => {
 
               <div className="card-body text-center">
 
-                <h6>{item.title}</h6>
+                <h6 className="text-truncate">
+                  {item.title}
+                </h6>
 
-                <p className="small">
-                  {item.description}
-                </p>
+               <p
+  className="small"
+  style={{
+    display: "-webkit-box",
+    WebkitLineClamp: 2,
+    WebkitBoxOrient: "vertical",
+    overflow: "hidden"
+  }}
+>
+  {item.description}
+</p>
 
+
+                {/* VIEW */}
+                <button
+                  className="btn btn-info btn-sm mb-2 w-100"
+                  data-bs-toggle="modal"
+                  data-bs-target="#viewGalleryModal"
+                  onClick={() => setViewItem(item)}
+                >
+                  View
+                </button>
+
+                {/* EDIT */}
                 <button
                   className="btn btn-warning btn-sm mb-2 w-100"
                   data-bs-toggle="modal"
@@ -165,6 +189,7 @@ const GalleryManager = () => {
                   Edit
                 </button>
 
+                {/* DELETE */}
                 <button
                   onClick={() => deleteImage(item._id)}
                   className="btn btn-danger btn-sm w-100"
@@ -182,6 +207,52 @@ const GalleryManager = () => {
 
       </div>
 
+      {/* ================= VIEW MODAL ================= */}
+
+      <div
+        className="modal fade"
+        id="viewGalleryModal"
+        tabIndex="-1"
+      >
+
+        <div className="modal-dialog modal-lg modal-dialog-centered">
+
+          <div className="modal-content">
+
+            <div className="modal-header">
+
+              <h5 className="modal-title">
+                {viewItem?.title}
+              </h5>
+
+              <button
+                className="btn-close"
+                data-bs-dismiss="modal"
+              ></button>
+
+            </div>
+
+            <div className="modal-body text-center">
+
+              <img
+                src={`${IMAGE_BASE_URL}/${viewItem?.image}`}
+                className="img-fluid rounded mb-3"
+                style={{ maxHeight: "60vh" }}
+                alt=""
+              />
+
+              <p className="text-muted">
+                {viewItem?.description}
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
       {/* ================= EDIT MODAL ================= */}
 
       <div
@@ -189,7 +260,9 @@ const GalleryManager = () => {
         id="editGalleryModal"
         tabIndex="-1"
       >
+
         <div className="modal-dialog">
+
           <div className="modal-content">
 
             <div className="modal-header">
@@ -199,14 +272,12 @@ const GalleryManager = () => {
 
             <div className="modal-body">
 
-              {/* TITLE */}
               <input
                 className="form-control mb-2"
                 value={editTitle}
                 onChange={(e) => setEditTitle(e.target.value)}
               />
 
-              {/* DESCRIPTION */}
               <textarea
                 className="form-control mb-2"
                 rows="2"
@@ -214,7 +285,6 @@ const GalleryManager = () => {
                 onChange={(e) => setEditDescription(e.target.value)}
               />
 
-              {/* OLD IMAGE PREVIEW */}
               <p className="mb-1">Current Image:</p>
 
               <img
@@ -222,9 +292,9 @@ const GalleryManager = () => {
                 className="w-100 mb-2"
                 height="150"
                 style={{ objectFit: "cover" }}
+                alt=""
               />
 
-              {/* NEW IMAGE */}
               <input
                 type="file"
                 className="form-control"
@@ -253,7 +323,9 @@ const GalleryManager = () => {
             </div>
 
           </div>
+
         </div>
+
       </div>
 
     </div>

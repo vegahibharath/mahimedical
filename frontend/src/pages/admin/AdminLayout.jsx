@@ -1,16 +1,18 @@
 import { useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, Link } from "react-router-dom";
 import { logout } from "../../utils/Auth";
 
 const AdminLayout = () => {
 
   const navigate = useNavigate();
+
   const [open, setOpen] = useState(true);
+  const [openTherapists, setOpenTherapists] = useState(false);
 
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
 
-      {/* SIDEBAR */}
+      {/* ================= SIDEBAR ================= */}
       <div
         style={{
           width: open ? "220px" : "70px",
@@ -34,6 +36,7 @@ const AdminLayout = () => {
         {/* MENU */}
         <div>
 
+          {/* DASHBOARD */}
           <div
             className="mb-3"
             style={{ cursor: "pointer" }}
@@ -42,6 +45,7 @@ const AdminLayout = () => {
             🏠 {open && "Dashboard"}
           </div>
 
+          {/* BLOGS */}
           <div
             className="mb-3"
             style={{ cursor: "pointer" }}
@@ -50,6 +54,7 @@ const AdminLayout = () => {
             📝 {open && "Blogs"}
           </div>
 
+          {/* NEWS */}
           <div
             className="mb-3"
             style={{ cursor: "pointer" }}
@@ -58,6 +63,7 @@ const AdminLayout = () => {
             📰 {open && "News"}
           </div>
 
+          {/* GALLERY */}
           <div
             className="mb-3"
             style={{ cursor: "pointer" }}
@@ -66,8 +72,47 @@ const AdminLayout = () => {
             🖼 {open && "Gallery"}
           </div>
 
+          {/* ================= THERAPISTS DROPDOWN ================= */}
+
           <div
-            style={{ cursor: "pointer", marginTop: "30px", color: "#ffdada" }}
+            className="mb-2"
+            style={{ cursor: "pointer" }}
+            onClick={() => setOpenTherapists(!openTherapists)}
+          >
+            👨‍⚕️ {open && "Therapists"} {open && (openTherapists ? "▲" : "▼")}
+          </div>
+
+          {openTherapists && open && (
+            <ul className="list-unstyled ms-3 mt-2">
+
+              <li className="mb-1">
+                <Link
+                  className="text-white text-decoration-none"
+                  to="/admin/therapists/getall"
+                >
+                  ➤ View Therapists
+                </Link>
+              </li>
+
+              <li className="mb-1">
+                <Link
+                  className="text-white text-decoration-none"
+                  to="/admin/therapists/add"
+                >
+                  ➤ Add Therapist
+                </Link>
+              </li>
+
+            </ul>
+          )}
+
+          {/* LOGOUT */}
+          <div
+            style={{
+              cursor: "pointer",
+              marginTop: "30px",
+              color: "#ffdada"
+            }}
             onClick={logout}
           >
             🚪 {open && "Logout"}
@@ -77,7 +122,7 @@ const AdminLayout = () => {
 
       </div>
 
-      {/* MAIN AREA */}
+      {/* ================= MAIN AREA ================= */}
       <div style={{ flex: 1 }}>
 
         {/* TOP BAR */}
@@ -107,7 +152,13 @@ const AdminLayout = () => {
         </div>
 
         {/* PAGE CONTENT */}
-        <div style={{ padding: "20px", background: "#f5f7fb", minHeight: "calc(100vh - 60px)" }}>
+        <div
+          style={{
+            padding: "20px",
+            background: "#f5f7fb",
+            minHeight: "calc(100vh - 60px)"
+          }}
+        >
 
           <Outlet />
 
