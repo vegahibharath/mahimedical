@@ -68,8 +68,12 @@ const NewsPage = () => {
 
       {/* NEWS GRID */}
       <div className="row g-4">
+{news.length === 0 ? (
+  <div className="text-center text-muted">
+    No news available
+  </div>
+) : news.map(n => (
 
-        {news.map(n => (
 
           <div key={n._id} className="col-lg-4 col-md-6">
 
@@ -142,7 +146,7 @@ const NewsPage = () => {
 
                 <div className="d-flex justify-content-between align-items-center">
 
-                  <span>👁 {activeNews.views}</span>
+                  {/* <span>👁 {activeNews.views}</span> */}
 
                   <button
                     className="btn btn-secondary btn-sm"

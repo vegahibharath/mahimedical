@@ -24,7 +24,12 @@ const GalleryPage = () => {
       {/* GALLERY GRID */}
       <div className="row g-4">
 
-        {gallery.map((img) => (
+       {gallery.length === 0 ? (
+  <div className="text-center text-muted">
+    No images in gallery
+  </div>
+) : gallery.map((img) => (
+
 
           <div key={img._id} className="col-lg-3 col-md-4 col-sm-6">
 
@@ -43,7 +48,7 @@ const GalleryPage = () => {
 
               <div className="card-body text-center">
                 <h6 className="mb-1 text-truncate">{img.title}</h6>
-                <small className="text-muted text-truncate d-block">
+                <small className="text-muted">
                   {img.description}
                 </small>
               </div>

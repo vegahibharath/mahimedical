@@ -20,7 +20,7 @@ app.use("/api/therapists", require("./routes/therapistRoutes"));
 
 // DB
 mongoose
-  .connect("mongodb://127.0.0.1:27017/medical")
+  .connect("mongodb://127.0.0.1:27017/medicalabc")
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error(err));
 

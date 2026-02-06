@@ -290,9 +290,13 @@ const Home = () => {
           Our Therapists
         </h3>
 
-        {loading ? (
-          <div className="text-center">Loading therapists...</div>
-        ) : (
+  {loading ? (
+    <div className="text-center">Loading therapists...</div>
+  ) : therapists.length === 0 ? (
+    <div className="text-center text-muted">
+      No therapists available
+    </div>
+  ) : (
           <div className="row">
 
             {therapists.map((t) => (

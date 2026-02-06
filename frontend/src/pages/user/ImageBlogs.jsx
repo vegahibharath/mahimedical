@@ -155,7 +155,12 @@ const ImageBlogs = () => {
       <h4 className="mb-4">📸 Blogs With Images</h4>
 
       <div className="row">
-        {blogs.map((blog) => (
+    {blogs.length === 0 ? (
+  <div className="text-center text-muted">
+    No blogs available
+  </div>
+) : blogs.map(blog => (
+
           <div className="col-md-4 mb-4" key={blog._id}>
             <div className="card h-100 shadow">
               <div className="card-body d-flex flex-column">
