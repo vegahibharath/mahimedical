@@ -8,7 +8,7 @@ const GalleryPage = () => {
 
   useEffect(() => {
     api.get("/gallery")
-      .then(res => setGallery(res.data))
+      .then(res => setGallery(res.data || []))
       .catch(err => console.error(err));
   }, []);
 

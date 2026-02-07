@@ -142,13 +142,14 @@ const GalleryManager = () => {
 
             <div className="card shadow h-100">
 
-              <img
-                src={`${IMAGE_BASE_URL}/${item.image}`}
-                className="card-img-top"
-                height="180"
-                style={{ objectFit: "cover" }}
-                alt="gallery"
-              />
+           <img
+  src={`${IMAGE_BASE_URL}/${item.image}?v=${item.updatedAt || Date.now()}`}
+  className="card-img-top"
+  height="180"
+  style={{ objectFit: "cover" }}
+  alt="gallery"
+/>
+
 
               <div className="card-body text-center">
 
@@ -234,12 +235,13 @@ const GalleryManager = () => {
 
             <div className="modal-body text-center">
 
-              <img
-                src={`${IMAGE_BASE_URL}/${viewItem?.image}`}
-                className="img-fluid rounded mb-3"
-                style={{ maxHeight: "60vh" }}
-                alt=""
-              />
+            <img
+  src={`${IMAGE_BASE_URL}/${viewItem?.image}?v=${viewItem?.updatedAt || Date.now()}`}
+  className="img-fluid rounded mb-3"
+  style={{ maxHeight: "60vh" }}
+  alt=""
+/>
+
 
               <p className="text-muted">
                 {viewItem?.description}
@@ -287,13 +289,14 @@ const GalleryManager = () => {
 
               <p className="mb-1">Current Image:</p>
 
-              <img
-                src={`${IMAGE_BASE_URL}/${oldImage}`}
-                className="w-100 mb-2"
-                height="150"
-                style={{ objectFit: "cover" }}
-                alt=""
-              />
+             <img
+  src={`${IMAGE_BASE_URL}/${oldImage}?v=${Date.now()}`}
+  className="w-100 mb-2"
+  height="150"
+  style={{ objectFit: "cover" }}
+  alt=""
+/>
+
 
               <input
                 type="file"

@@ -2,7 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
   // baseURL: "http://localhost:5000/api"
-  baseURL: "/"
+  baseURL: "/api"
 });
 
 // 🔐 Attach token automatically (Admin)
@@ -31,7 +31,8 @@ api.interceptors.response.use(
 const IMAGE_BASE_URL =
   window.location.hostname === "localhost"
     ? "http://localhost:5000"
-    : "/"; 
+    : window.location.origin;
+
 
 export { IMAGE_BASE_URL };
 

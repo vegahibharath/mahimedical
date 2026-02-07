@@ -32,8 +32,10 @@ import api,{IMAGE_BASE_URL} from "../../api/api";
  
     /* ================= CREATE EDITOR ================= */
   /* ================= EDIT EDITOR ================= */
-  const editor = useEditor({
-    extensions: [
+const editor = useEditor({
+  immediatelyRender: false,
+  extensions: [
+
       StarterKit.configure({
         image: false,
         link: { openOnClick: false },
@@ -115,13 +117,18 @@ import api,{IMAGE_BASE_URL} from "../../api/api";
           ? JSON.parse(blog.textContent)
           : blog.textContent;
  
-      return generateHTML(content, [
-        StarterKit.configure({ image: false }),
-        CustomImageExtension,
-        TextAlign.configure({
-          types: ["heading", "paragraph", "customImage"],
-        }),
-      ]);
+     generateHTML(JSON.parse(blog.textContent), [
+  StarterKit.configure({ image: false }),
+  TextStyle,
+  Color,
+  Highlight,
+  Subscript,
+  Superscript,
+  CustomImageExtension.configure({
+    inline: false,
+  }),
+])
+
     } catch (err) {
       console.error("❌ Blog render error:", err);
       return "<p>Error loading blog</p>";
@@ -160,9 +167,14 @@ import api,{IMAGE_BASE_URL} from "../../api/api";
     setEditId(blog._id);
     setEditTitle(blog.title);
  
-    if (editor && blog.textContent) {
-      editor.commands.setContent(JSON.parse(blog.textContent));
-    }
+   if (editor && blog.textContent) {
+  try {
+    editor.commands.setContent(JSON.parse(blog.textContent));
+  } catch (err) {
+    console.warn("Invalid TipTap JSON:", err);
+  }
+}
+
    
     setShowEditModal(true);
   };
