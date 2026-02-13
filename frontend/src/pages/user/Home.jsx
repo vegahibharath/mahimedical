@@ -2,19 +2,24 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api, { IMAGE_BASE_URL } from "../../api/api";
 import { Carousel } from "bootstrap";
+import { isLiked, setLiked } from "../../utils/likes";
 
 const Home = () => {
 
   // ================= THERAPIST STATES =================
   const [therapists, setTherapists] = useState([]);
   const [loading, setLoading] = useState(true);
+const [search, setSearch] = useState("");
+const [filteredTherapists, setFilteredTherapists] = useState([]);
 
   // ================= FETCH THERAPISTS =================
   useEffect(() => {
     const fetchTherapists = async () => {
       try {
         const res = await api.get("/therapists/userall");
-        setTherapists(res.data.therapists);
+       setTherapists(res.data.therapists);
+setFilteredTherapists(res.data.therapists);
+
         setLoading(false);
       } catch (err) {
         console.error(err);
@@ -24,6 +29,56 @@ const Home = () => {
 
     fetchTherapists();
   }, []);
+useEffect(() => {
+  const filtered = therapists.filter((t) => {
+    const searchText = search.toLowerCase();
+
+    return (
+      t.name?.toLowerCase().includes(searchText) ||
+      t.specialization?.toLowerCase().includes(searchText) ||
+      t.address?.toLowerCase().includes(searchText)
+    );
+  });
+
+  setFilteredTherapists(filtered);
+}, [search, therapists]);
+const handleShare = async (therapist) => {
+  const shareUrl = `${window.location.origin}/therapist/${therapist._id}`;
+
+  const text = `${therapist.name} - ${therapist.specialization}
+
+View therapist profile:
+${shareUrl}`;
+
+  try {
+    // 1️⃣ Mobile + supported browsers
+    if (navigator.share) {
+      await navigator.share({
+        title: therapist.name,
+        text,
+        url: shareUrl,
+      });
+      return;
+    }
+
+    // 2️⃣ Desktop fallback → copy to clipboard
+    if (navigator.clipboard) {
+      await navigator.clipboard.writeText(text);
+      alert("Link copied! You can paste anywhere.");
+      return;
+    }
+
+    // 3️⃣ Final fallback → WhatsApp web
+    window.open(
+      `https://wa.me/?text=${encodeURIComponent(text)}`,
+      "_blank"
+    );
+
+  } catch (err) {
+    console.log("Share cancelled:", err);
+  }
+};
+
 
   // ================= INIT BOOTSTRAP CAROUSEL =================
   useEffect(() => {
@@ -46,6 +101,30 @@ const Home = () => {
       .getElementById("therapists-section")
       ?.scrollIntoView({ behavior: "smooth" });
   };
+const handleLike = async (id) => {
+  if (isLiked(id)) {
+    alert("Already liked");
+    return;
+  }
+
+  try {
+    const res = await api.put(`/therapists/like/${id}`);
+
+    setTherapists(prev =>
+      prev.map(t =>
+        t._id === id
+          ? { ...t, likesCount: res.data.likesCount }
+          : t
+      )
+    );
+
+    setLiked(id);
+
+  } catch {
+    alert("Error liking therapist");
+  }
+};
+
 
   return (
     <div>
@@ -289,6 +368,17 @@ const Home = () => {
         <h3 className="text-center fw-bold mb-4 text-primary">
           Our Therapists
         </h3>
+<div className="row mb-4">
+  <div className="col-md-6 mx-auto">
+    <input
+      type="text"
+      className="form-control form-control-lg shadow-sm"
+      placeholder="Search therapist by name, specialization, address..."
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+    />
+  </div>
+</div>
 
   {loading ? (
     <div className="text-center">Loading therapists...</div>
@@ -299,7 +389,8 @@ const Home = () => {
   ) : (
           <div className="row">
 
-            {therapists.map((t) => (
+            {filteredTherapists.map((t) => (
+
 
               <div key={t._id} className="col-md-4 mb-4">
 
@@ -323,6 +414,22 @@ const Home = () => {
                     <p>
                       {t.bio?.slice(0, 100)}...
                     </p>
+<button
+  className={`btn btn-sm ${
+    isLiked(t._id) ? "btn-secondary" : "btn-outline-danger"
+  }`}
+  onClick={() => handleLike(t._id)}
+  disabled={isLiked(t._id)}
+>
+  ❤️ {t.likesCount || 0}
+</button>
+
+<button
+  className="btn btn-outline-primary btn-sm ms-2"
+  onClick={() => handleShare(t)}
+>
+  🔗 Share
+</button>
 
                   </div>
 

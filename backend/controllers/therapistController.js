@@ -165,4 +165,41 @@ exports.deleteTherapist = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+exports.likeTherapist = async (req, res) => {
+  try {
+    const therapist = await Therapist.findById(req.params.id);
+
+    if (!therapist) {
+      return res.status(404).json({ message: "Therapist not found" });
+    }
+
+    therapist.likesCount += 1;
+    await therapist.save();
+
+    res.json({
+      success: true,
+      likesCount: therapist.likesCount
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+// GET SINGLE THERAPIST (For Share Profile)
+exports.getTherapistById = async (req, res) => {
+  try {
+    const therapist = await Therapist.findById(req.params.id);
+
+    if (!therapist) {
+      return res.status(404).json({ message: "Therapist not found" });
+    }
+
+    res.json(therapist);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
 

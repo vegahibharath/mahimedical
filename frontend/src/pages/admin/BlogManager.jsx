@@ -109,31 +109,41 @@ const editor = useEditor({
     };
   };
  
-  const getBlogHTML = (blog) => {
+ const getBlogHTML = (blog) => {
+  try {
+    if (!blog?.textContent) return "";
+
+    let content;
     try {
-      if (!blog?.textContent) return "";
-      const content =
+      content =
         typeof blog.textContent === "string"
           ? JSON.parse(blog.textContent)
           : blog.textContent;
- 
-     generateHTML(JSON.parse(blog.textContent), [
-  StarterKit.configure({ image: false }),
-  TextStyle,
-  Color,
-  Highlight,
-  Subscript,
-  Superscript,
-  CustomImageExtension.configure({
-    inline: false,
-  }),
-])
-
-    } catch (err) {
-      console.error("❌ Blog render error:", err);
-      return "<p>Error loading blog</p>";
+    } catch {
+      return "<p>Invalid blog data</p>";
     }
-  };
+
+    return generateHTML(content, [
+      StarterKit.configure({ image: false }),
+      TextStyle,
+      Color,
+      Highlight,
+      Subscript,
+      Superscript,
+      CustomImageExtension.configure({
+        inline: false,
+      }),
+      TextAlign.configure({
+        types: ["heading", "paragraph", "customImage"],
+      }),
+    ]);
+  } catch (err) {
+    console.error("Blog render error:", err);
+    return "<p>Error loading blog</p>";
+  }
+};
+
+
  
     /* ================= CREATE BLOG ================= */
   const submitBlog = async (e) => {
@@ -163,22 +173,25 @@ const editor = useEditor({
  
  
     /* ================= OPEN EDIT MODAL ================= */
-  const openEditModal = (blog) => {
-    setEditId(blog._id);
-    setEditTitle(blog.title);
- 
-   if (editor && blog.textContent) {
-  try {
-    editor.commands.setContent(JSON.parse(blog.textContent));
-  } catch (err) {
-    console.warn("Invalid TipTap JSON:", err);
-  }
-}
+ const openEditModal = (blog) => {
+  setEditId(blog._id);
+  setEditTitle(blog.title);
+  setShowEditModal(true);
+};
+useEffect(() => {
+  if (!editor || !showEditModal || !editId) return;
 
-   
-    setShowEditModal(true);
-  };
- 
+  const blog = blogs.find(b => b._id === editId);
+
+  if (blog?.textContent) {
+    try {
+      editor.commands.setContent(JSON.parse(blog.textContent));
+    } catch (err) {
+      console.log("Content load error:", err);
+    }
+  }
+}, [editor, showEditModal, editId]);
+
  
     /* ================= UPDATE BLOG ================= */
     const updateBlog = async () => {
@@ -374,27 +387,29 @@ const likeBlog = async (id) => {
  
                 <h5>{blog.title}</h5>
  
-              <div
-    className="blog-preview mb-2"
-    style={{
-      maxHeight: "120px",
-      overflow: "hidden",
-    }}  
-    dangerouslySetInnerHTML={{
-      __html: blog.textContent
-        ? generateHTML(JSON.parse(blog.textContent), [
-    StarterKit.configure({
-      image: false,
-    }),
-    CustomImageExtension.configure({
-      inline: false,
-    }),
-  ])
- 
-        : "",
-    }}
-  />
- 
+          <div
+  className="blog-preview mb-2"
+  style={{
+    maxHeight: "120px",
+    overflow: "hidden",
+  }}
+  dangerouslySetInnerHTML={{
+    __html: blog.textContent
+      ? generateHTML(JSON.parse(blog.textContent), [
+          StarterKit.configure({ image: false }),
+          TextStyle,
+          Color,
+          Highlight,
+          Subscript,
+          Superscript,
+          CustomImageExtension.configure({
+            inline: false,
+          }),
+        ])
+      : "",
+  }}
+/>
+
  
  
                 <div className="d-flex justify-content-between mb-2">

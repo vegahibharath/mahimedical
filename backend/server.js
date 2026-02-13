@@ -17,6 +17,7 @@ app.use("/api/gallery", require("./routes/galleryRoutes"));
 app.use("/api/blogs", require("./routes/blogRoutes"));
 app.use("/api/news", require("./routes/newsRoutes"));
 app.use("/api/therapists", require("./routes/therapistRoutes"));
+app.use("/api/settings", require("./routes/settingsRoutes"));
 
 // DB
 mongoose

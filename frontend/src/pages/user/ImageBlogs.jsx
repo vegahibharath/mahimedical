@@ -4,6 +4,11 @@ import { generateHTML } from "@tiptap/html";
 import StarterKit from "@tiptap/starter-kit";
 import CustomImageExtension from "../admin/ImageExtension";
 import { TextAlign } from "@tiptap/extension-text-align";
+import { TextStyle } from "@tiptap/extension-text-style";
+import { Color } from "@tiptap/extension-color";
+import { Highlight } from "@tiptap/extension-highlight";
+import { Subscript } from "@tiptap/extension-subscript";
+import { Superscript } from "@tiptap/extension-superscript";
 
 const ImageBlogs = () => {
   const [blogs, setBlogs] = useState([]);
@@ -32,20 +37,31 @@ const ImageBlogs = () => {
     setBlogs(imageBlogs);
   };
 
-  const renderBlog = (blog) => {
-    return generateHTML(
+ const renderBlog = (blog) => {
+  try {
+    const content =
       typeof blog.textContent === "string"
         ? JSON.parse(blog.textContent)
-        : blog.textContent,
-      [
-        StarterKit.configure({ image: false }),
-        CustomImageExtension,
-        TextAlign.configure({
-          types: ["heading", "paragraph", "customImage"],
-        }),
-      ]
-    );
-  };
+        : blog.textContent;
+
+    return generateHTML(content, [
+      StarterKit.configure({ image: false }),
+      TextStyle,
+      Color,
+      Highlight,
+      Subscript,
+      Superscript,
+      CustomImageExtension,
+      TextAlign.configure({
+        types: ["heading", "paragraph", "customImage"],
+      }),
+    ]);
+  } catch (err) {
+    console.error("Render blog error:", err);
+    return "<p>Error loading blog</p>";
+  }
+};
+
 
   const hasLiked = (id) => {
     const likedBlogs = JSON.parse(localStorage.getItem("likedBlogs")) || [];
@@ -174,22 +190,23 @@ const ImageBlogs = () => {
                   }}
                 />
 
-                <div className="mt-auto d-flex justify-content-between">
-                  <button
-                    className="btn btn-sm btn-primary"
-                    onClick={() => setSelectedBlog(blog)}
-                  >
-                    View
-                  </button>
+               <div className="mt-auto d-flex justify-content-between align-items-center">
 
-                  <button
-                    className="btn btn-link p-0 text-danger"
-                    disabled={hasLiked(blog._id)}
-                    onClick={() => likeBlog(blog._id)}
-                  >
-                    ❤️ {blog.likes}
-                  </button>
-                </div>
+  {/* LIKE BUTTON */}
+ {/* ONLY LIKE COUNT */}
+  <span className="text-danger fw-bold">
+    ❤️ {blog.likes || 0}
+  </span>
+
+  {/* VIEW BUTTON */}
+  <button
+    className="btn btn-sm btn-primary"
+    onClick={() => setSelectedBlog(blog)}
+  >
+    View
+  </button>
+
+</div>
               </div>
             </div>
           </div>
@@ -230,6 +247,15 @@ const ImageBlogs = () => {
                     }}
                   />
                 </div>
+<div className="text-center mt-4">
+  <button
+    className="btn btn-outline-danger"
+    disabled={hasLiked(selectedBlog._id)}
+    onClick={() => likeBlog(selectedBlog._id)}
+  >
+    ❤️ {selectedBlog.likes}
+  </button>
+</div>
 
                 <div className="modal-footer">
                   <button

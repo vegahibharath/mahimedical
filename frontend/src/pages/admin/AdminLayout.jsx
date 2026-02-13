@@ -105,6 +105,14 @@ const AdminLayout = () => {
 
             </ul>
           )}
+<div
+  className="mb-3"
+  style={{ cursor: "pointer" }}
+  onClick={() => navigate("/admin/settings")}
+>
+  ⚙ {open && "Settings"}
+</div>
+
 
           {/* LOGOUT */}
           <div

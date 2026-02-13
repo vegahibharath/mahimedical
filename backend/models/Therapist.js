@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
- 
+
 const therapistSchema = new mongoose.Schema(
   {
     name: {
@@ -19,8 +19,7 @@ const therapistSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
- 
-    // 🆕 Extra Fields
+
     contact: {
       type: String,
       required: true,
@@ -41,8 +40,15 @@ const therapistSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+
+    // ⭐ ADD THIS PART
+ likesCount: {
+  type: Number,
+  default: 0
+},
+
   },
   { timestamps: true }
 );
- 
+
 module.exports = mongoose.model("Therapist", therapistSchema);
