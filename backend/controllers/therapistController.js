@@ -62,7 +62,7 @@ exports.addTherapist = async (req, res) => {
       name,
       specialization,
       bio,
-      image: req.file.path,
+      image: `gallery/${req.file.filename}`,
       contact,
       qualification,
       additionalInformation,
@@ -130,7 +130,7 @@ console.log("FILE:", req.file);
     therapist.address = address || therapist.address;
 
     if (req.file) {
-      therapist.image = req.file.path;
+      therapist.image=`gallery/${req.file.filename}`
     }
 
     await therapist.save();

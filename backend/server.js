@@ -12,7 +12,7 @@ app.use(express.json());
 
 // Rgoutes
 app.use("/api/admin", require("./routes/adminRoutes"));
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 app.use("/api/gallery", require("./routes/galleryRoutes"));
 app.use("/api/blogs", require("./routes/blogRoutes"));
 app.use("/api/news", require("./routes/newsRoutes"));

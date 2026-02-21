@@ -47,7 +47,7 @@ export default function TherapistProfile() {
       
       {/* HEADER SECTION */}
       <div className="container pt-5">
-        <button onClick={() => navigate(-1)} className="btn btn-sm btn-white mb-4 rounded-pill shadow-sm border px-3">
+        <button onClick={() => navigate("/")} className="btn btn-sm btn-white mb-4 rounded-pill shadow-sm border px-3">
           ← Back
         </button>
 

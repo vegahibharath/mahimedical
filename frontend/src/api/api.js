@@ -30,8 +30,8 @@ api.interceptors.response.use(
 );
 const IMAGE_BASE_URL =
   window.location.hostname === "localhost"
-    ? "http://localhost:5000"
-    : window.location.origin;
+    ? "http://localhost:5000/uploads"
+    : `${window.location.origin}/uploads`;
 
 
 export { IMAGE_BASE_URL };
