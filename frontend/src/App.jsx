@@ -20,6 +20,7 @@ import ImageBlogs from "./pages/user/ImageBlogs";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import TherapistProfile from "./pages/admin/TherapistProfile";
+import Footer from "./pages/user/Footer";
 
 function App() {
   return (
@@ -61,9 +62,11 @@ function App() {
           <Route path="gallery" element={<GalleryPage />} />
           <Route path="contact" element={<ContactPage />} />
           <Route path="blogs/images" element={<ImageBlogs />} />
+           
         </Route>
-
+      
       </Routes>
+ <Footer/>
     </BrowserRouter>
   );
 }

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api, { IMAGE_BASE_URL } from "../../api/api";
-import { Carousel } from "bootstrap";
+import { Carousel,Modal } from "bootstrap";
 import { isLiked, setLiked } from "../../utils/likes";
+import Footer from "./Footer";
 
 const Home = () => {
 
@@ -11,7 +12,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
 const [search, setSearch] = useState("");
 const [filteredTherapists, setFilteredTherapists] = useState([]);
-
+const [selectedTherapist, setSelectedTherapist] = useState(null);
   // ================= FETCH THERAPISTS =================
   useEffect(() => {
     const fetchTherapists = async () => {
@@ -124,8 +125,20 @@ const handleLike = async (id) => {
     alert("Error liking therapist");
   }
 };
+const handleView = async (id) => {
+  try {
+    const res = await api.get(`/therapists/${id}`);
+    setSelectedTherapist(res.data);
 
+    const modalElement = document.getElementById("therapistModal");
+    const modal = new Modal(modalElement);
 
+    modal.show();
+
+  } catch (error) {
+    console.error(error);
+  }
+};
   return (
     <div>
 
@@ -186,12 +199,12 @@ const handleLike = async (id) => {
               <div className="carousel-caption text-start">
 
                 <h1 className="fw-bold">
-                  Jagruthi Physiotherapy Clinic
+                Physiotherapy Professional Unity of Telangana
                 </h1>
 
-                <p className="fs-5">
+                {/* <p className="fs-5">
                   Trusted Care For Pain Relief & Mobility Recovery
-                </p>
+                </p> */}
 
                 <button
                   className="btn btn-primary px-4 py-2 mt-2"
@@ -320,18 +333,31 @@ const handleLike = async (id) => {
 
             <div className="col-md-6 mb-4">
 
-              <span className="badge bg-primary px-3 py-2 mb-3">
-                Jagruthi Physiotherapy Clinic
-              </span>
+             
 
               <h2 className="fw-bold text-primary mt-3">
-                Professional Physiotherapy Care
-              </h2>
+Physiotherapy Professional Unity of Telangana
+</h2>
 
-              <p className="text-muted mt-3">
-                We provide personalized physiotherapy treatments focused on pain
-                management, injury recovery, posture correction, and rehabilitation.
-              </p>
+<p className="text-muted mt-3">
+Physiotherapy Professional is a person who practices physiotherapy by undertaking
+comprehensive examination and appropriate investigation, provides treatment and
+advice to individuals suffering from movement dysfunction, disability, trauma,
+and disease.
+</p>
+
+<p className="text-muted">
+Physiotherapists use physical modalities including therapeutic exercises,
+mobilization, manipulations, electrical and thermal agents and other
+electro-therapeutics for prevention, screening, diagnosis, treatment,
+health promotion and fitness.
+</p>
+
+<p className="text-muted">
+A physiotherapist can practice independently or as part of a
+multi-disciplinary medical team and must possess a minimum qualification
+of a Baccalaureate degree in Physiotherapy.
+</p>
 
             </div>
 
@@ -360,7 +386,39 @@ const handleLike = async (id) => {
         </div>
 
       </div>
+<div className="container py-5">
+  <div className="row align-items-center">
 
+    <div className="col-md-6">
+      <img
+        src="/physio-awareness.jpg"
+        alt="Physiotherapy Awareness"
+        className="img-fluid rounded shadow"
+      />
+    </div>
+
+    <div className="col-md-6">
+
+      <h3 className="fw-bold text-primary">
+        Protecting the Physiotherapy Profession
+      </h3>
+
+      <p className="text-muted mt-3">
+        To protect this prestigious profession, we are developing this platform
+        to bring together qualified physiotherapy professionals and create
+        awareness among the public.
+      </p>
+
+      <p className="text-muted">
+        Our goal is to eradicate duplicate and unethical physiotherapy
+        treatments in Telangana state and ensure patients receive treatment
+        only from qualified and registered physiotherapists.
+      </p>
+
+    </div>
+
+  </div>
+</div>
       {/* ================= THERAPISTS SECTION ================= */}
 
       <div className="container py-5" id="therapists-section">
@@ -394,7 +452,11 @@ const handleLike = async (id) => {
 
               <div key={t._id} className="col-md-4 mb-4">
 
-                <div className="card shadow h-100">
+                <div
+  className="card shadow h-100"
+  style={{ cursor: "pointer" }}
+  onClick={() => handleView(t._id)}
+>
 
                   <img
                     src={`${IMAGE_BASE_URL}/${t.image}`}
@@ -418,10 +480,25 @@ const handleLike = async (id) => {
   className={`btn btn-sm ${
     isLiked(t._id) ? "btn-secondary" : "btn-outline-danger"
   }`}
-  onClick={() => handleLike(t._id)}
+  onClick={(e) => {
+    e.stopPropagation();
+    handleLike(t._id);
+  }}
   disabled={isLiked(t._id)}
 >
   ❤️ {t.likesCount || 0}
+</button>
+
+<div className="mt-2">
+
+<button
+  className="btn btn-secondary btn-sm ms-2"
+  onClick={(e) => {
+    e.stopPropagation();
+    handleView(t._id);
+  }}
+>
+   View
 </button>
 
 <button
@@ -431,6 +508,7 @@ const handleLike = async (id) => {
   🔗 Share
 </button>
 
+</div>
                   </div>
 
                 </div>
@@ -443,7 +521,106 @@ const handleLike = async (id) => {
         )}
 
       </div>
+      {/* THERAPIST DETAILS MODAL */}
 
+<div
+  className="modal fade"
+  id="therapistModal"
+  tabIndex="-1"
+>
+  <div className="modal-dialog modal-lg modal-dialog-centered">
+
+    <div className="modal-content">
+
+      <div className="modal-header">
+        <h5 className="modal-title">
+          Therapist Details
+        </h5>
+
+        <button
+          type="button"
+          className="btn-close"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+
+      <div className="modal-body">
+
+        {selectedTherapist && (
+
+          <div className="row">
+
+            <div className="col-md-4 text-center">
+
+              <img
+                src={`${IMAGE_BASE_URL}/${selectedTherapist.image}`}
+                alt={selectedTherapist.name}
+                className="img-fluid rounded mb-3"
+              />
+
+            </div>
+
+            <div className="col-md-8">
+
+              <h4>{selectedTherapist.name}</h4>
+
+              <p>
+                <strong>Specialization:</strong>{" "}
+                {selectedTherapist.specialization}
+              </p>
+
+              <p>
+                <strong>Qualification:</strong>{" "}
+                {selectedTherapist.qualification}
+              </p>
+
+              <p>
+                <strong>Contact:</strong>{" "}
+                {selectedTherapist.contact}
+              </p>
+
+              <p>
+                <strong>Address:</strong>{" "}
+                {selectedTherapist.address}
+              </p>
+
+              <p>
+                <strong>Practicing Details:</strong>
+              </p>
+
+              <p>
+                {selectedTherapist.practicingDetails}
+              </p>
+
+              <p>
+                <strong>Additional Information:</strong>
+              </p>
+
+              <p>
+                {selectedTherapist.additionalInformation}
+              </p>
+
+              <p>
+                <strong>Bio:</strong>
+              </p>
+
+              <p>
+                {selectedTherapist.bio}
+              </p>
+
+            </div>
+
+          </div>
+
+        )}
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+<Footer/>
     </div>
   );
 };
